@@ -1,0 +1,325 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+body, html {
+  font-size: 12px;
+  font-family: Helvetica, sans-serif;
+height: 100%;
+  margin: 0px;
+}
+
+
+p.label{
+  margin-top:0px;
+}
+a:hover{
+  text-decoration: none;
+
+}
+
+header{
+  padding:5px 20px 0px;
+  border-bottom:1px solid black;
+  h1{
+    font-size:20px;
+    font-weight:400;
+    margin:0px;
+  }
+}
+
+a.create-button{
+  margin: 10px auto;
+}
+.delete{
+  position:absolute;
+  top:-25px;
+  right:0px;
+}
+.feature{
+  margin-left:25px;
+}
+.sidebar, .content, .elements, .audience, .similar-projects{
+  float:left;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  height:800px;
+  -webkit-transition: all 3.5s;
+  -moz-transition: all 3.5s;
+  transition: all 3.5s;
+}
+.comments-wrapper{
+    -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  transition: all .5s;
+}
+.content{
+  padding:20px;
+}
+.elements{
+  border-left:1px solid black;
+}
+
+// Sizes
+
+
+.sidebar.open{
+  width:25%;
+}
+
+
+
+.sidebar.closed{
+  width:5%;
+  padding:10px;
+}
+.content.twoScreens.closed{
+  width:95%;
+}
+
+.content.threeScreens.open, .right-info.threeScreens.open{
+  width:37.5%;
+}
+
+.content.threeScreens.closed, .right-info.threeScreens.closed{
+  width:47.5%;
+}
+
+.content.twoScreens.open{
+  width:75%;
+}
+
+
+.content.twoScreens.closed{
+  width:95%;
+}
+
+
+
+
+
+// Components
+
+.push_button{
+  position:relative;
+  width:500px;
+  color:#FFF;
+  display:block;
+  text-decoration:none;
+  margin:0 auto;
+  background:#cb3b27;
+  text-align:center;
+  padding:10px 10px;
+  
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  transition: all 0.1s;
+  
+  -webkit-box-shadow: 0px 2px 0px #84261a;
+        -moz-box-shadow: 0px 2px 0px #84261a;
+        box-shadow: 0px 2px 0px #84261a;
+}
+.push_button:active{
+    -webkit-box-shadow: 0px 0px 0px #84261a;
+    -moz-box-shadow: 0px 0px 0px #84261a;
+    box-shadow: 0px 0px 0px #84261a;
+    position:relative;
+    top:2px;
+}
+//
+//Over-Rides
+.full-width{
+  width:100%;
+}
+
+
+
+
+.page-create{
+  
+}
+
+
+.sidebar {
+  border-right:1px solid black;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+  min-height:100%;
+  max-width:25%;
+  ul {
+    margin: 0px;
+    list-style: none;
+    padding: 0px;
+    li {
+      cursor: pointer;
+      border-bottom: 1px solid #ddd;
+      padding: 0 0px;
+    }
+  }
+  h3 {
+    font-size: 14px;
+    small {
+      font-size: 12px;
+      color: #ccc;
+      font-weight: normal;
+    }
+    &.active {
+      color: red;
+    }
+  }
+}
+
+.page-home{
+
+}
+.pos-rel{
+  position:relative;
+}
+.addElm{
+  position:absolute;
+  top:0px;
+  right:0px;
+  width:40px;
+}
+
+
+// Old but maybe relevant....kinda need to see whatsup here
+#brief-view-container, #elm-view-container, #elm-create-container, #elm-show-container {
+  position: relative;
+  border-left: 1px solid #d0d0d0;
+  float:left;
+  background-color: #6FB07F;
+  min-height: 700px;
+  height:100%;
+  padding: 5px 25px;
+
+}
+#elm-view-container{
+   background-color: #068587;
+}
+
+.create-page{
+  width: 90%;
+  margin: auto;
+  padding-top:40px;
+}
+.menu-brief.active, .menu-elm.active{
+  color:red;
+}
+// Animations
+.page-home.ng-leave      {
+    -webkit-animation:slideOutLeft 0.35s both ease-in;
+  -moz-animation:slideOutLeft 0.35s both ease-in;
+  animation:slideOutLeft 0.35s both ease-in;   
+}
+.page-home.ng-enter{
+    -webkit-animation:slideInLeft 0.35s both ease-in;
+  -moz-animation:slideInLeft 0.35s both ease-in;
+  animation:slideInLeft 0.35s both ease-in;    
+}
+
+
+
+
+.page-create.ng-leave        {
+    -webkit-animation:slideOutDown 0.35s both ease-in;
+  -moz-animation:slideOutDown 0.35s both ease-in;
+  animation:slideOutDown 0.35s both ease-in;   
+}
+.page-create.ng-enter  {  
+    -webkit-animation:slideInUp 0.35s both ease-in;
+  -moz-animation:slideInUp 0.35s both ease-in;
+  animation:slideInUp 0.35s both ease-in;    
+}
+
+
+
+
+
+
+
+
+
+/* slide in from the Left */
+@keyframes slideInLeft {
+  from  { transform:translateX(-100%); }
+  to    { transform: translateX(0); }
+}
+@-moz-keyframes slideInLeft {
+  from  { -moz-transform:translateX(-100%); }
+  to    { -moz-transform: translateX(0); }
+}
+@-webkit-keyframes slideInLeft {
+  from  { -webkit-transform:translateX(-100%); }
+  to    { -webkit-transform: translateX(0); }
+}
+
+/* slide in from the Right */
+
+@keyframes slideInRight {
+  from  { transform:translateX(100%); }
+  to    { transform: translateX(52%); }
+}
+@-moz-keyframes slideInRight {
+  from  { -moz-transform:translateX(100%); }
+  to    { -moz-transform: translateX(52%); }
+}
+@-webkit-keyframes slideInRight {
+  from  { -webkit-transform:translateX(100%); }
+  to    { -webkit-transform: translateX(52%); }
+}
+
+/* slide in from the bottom */
+@keyframes slideInUp {
+  from  { transform:translateY(100%); }
+  to    { transform: translateY(0); }
+}
+@-moz-keyframes slideInUp {
+  from  { -moz-transform:translateY(100%); }
+  to    { -moz-transform: translateY(0); }
+}
+@-webkit-keyframes slideInUp {
+  from  { -webkit-transform:translateY(100%); }
+  to    { -webkit-transform: translateY(0); }
+}
+
+/* slide in from the bottom */
+@keyframes slideOutLeft {
+  to    { transform: translateX(-100%); }
+}
+@-moz-keyframes slideOutLeft {  
+  to    { -moz-transform: translateX(-100%); }
+}
+@-webkit-keyframes slideOutLeft {
+  to    { -webkit-transform: translateX(-100%); }
+}
+/* slide in from the bottom */
+@keyframes slideOutRight {
+  to    { transform: translateX(100%); }
+}
+@-moz-keyframes slideOutRight {  
+  to    { -moz-transform: translateX(100%); }
+}
+@-webkit-keyframes slideOutRight {
+  to    { -webkit-transform: translateX(100%); }
+}
+
+@keyframes slideOutDown {
+  to    { transform: translateY(100%); }
+}
+@-moz-keyframes slideOutDown {  
+  to    { -moz-transform: translateY(100%); }
+}
+@-webkit-keyframes slideOutDown {
+  to    { -webkit-transform: translateY(100%); }
+}
+// editable
+/*!
+angular-xeditable - 0.1.8
+Edit-in-place for angular.js
+Build date: 2014-01-10 
+*/
+
+.editable-wrap{display:inline-block;white-space:nowrap;margin:0}.editable-wrap .editable-controls,.editable-wrap .editable-error{margin-bottom:0}.editable-wrap .editable-controls>input,.editable-wrap .editable-controls>select,.editable-wrap .editable-controls>textarea{margin-bottom:0}.editable-wrap .editable-input{display:inline-block}.editable-buttons{display:inline-block;vertical-align:top}.editable-buttons button{margin-left:5px}.editable-input.editable-has-buttons{width:auto}.editable-bstime .editable-input input[type=text]{width:46px}.editable-bstime .well-small{margin-bottom:0;padding:10px}.editable-range output{display:inline-block;min-width:30px;vertical-align:top;text-align:center}.editable-color input[type=color]{width:50px}.editable-checkbox label span,.editable-checklist label span,.editable-radiolist label span{margin-left:7px;margin-right:10px}.editable-hide{display:none!important}.editable-click,a.editable-click{text-decoration:none;color:#428bca;border-bottom:dashed 1px #428bca}.editable-click:hover,a.editable-click:hover{text-decoration:none;color:#2a6496;border-bottom-color:#2a6496}.editable-empty,.editable-empty:hover,.editable-empty:focus,a.editable-empty,a.editable-empty:hover,a.editable-empty:focus{font-style:italic;color:#D14;text-decoration:none}

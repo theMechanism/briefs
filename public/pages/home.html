@@ -1,0 +1,26 @@
+
+<div ng-controller="BriefsCtrl" class='container'>
+  <a href="#create" class=" create-button push_button">Create New Brief</a>
+<table class="table">
+ <thead>
+    <tr>
+      <th>Due Date</th>
+      <th>Client</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="brief in briefs">
+      <td>{{brief.due_date}}</td>
+      <td>
+        <p><strong>{{brief.name}}</strong></p>
+        <p>{{brief.website}}</p>
+        <p>{{brief.purpose}}</p>
+      
+      </td>
+      <td><a href="">Edit</a> || <a href="">Print</a></td>
+    </tr>
+  </tbody>
+</table>
+  
+</div>

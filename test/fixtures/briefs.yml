@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  issue_date: 2014-07-03
+  due_date: 2014-07-03
+  contact: MyString
+  instructions: MyText
+  website: MyString
+  questions: MyText
+  audience: MyString
+
+two:
+  name: MyString
+  issue_date: 2014-07-03
+  due_date: 2014-07-03
+  contact: MyString
+  instructions: MyText
+  website: MyString
+  questions: MyText
+  audience: MyString
