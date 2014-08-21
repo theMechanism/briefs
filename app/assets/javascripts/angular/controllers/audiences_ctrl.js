@@ -20,7 +20,7 @@ App.controller("AudiencesCtrl", function($scope, $resource, $http, $location){
 			}).success(function(d){
 				
 					$scope.currentBrief.audiences.push(d);
-
+					$scope.updateAudienceVars();
 			}).error(function(){});		
 		}else{
 			$scope.updateAudienceVars();
