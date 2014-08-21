@@ -118,7 +118,7 @@
 					<button ng-click="addNewFeature(elem)">+1</button>
 					<ul>
 						<li ng-repeat='feature in elem.features' class='pos-rel'>
-							<button type="button" ng-click="deleteThis('feature', feature.id, $event)" class="delete btn-danger">X</button>
+							<!-- <button type="button" ng-click="deleteThis('feature', feature.id, $event)" class="delete btn-danger">X</button> -->
 							<p onbeforesave="updateFeature(elem, feature, $data)" editable-text="feature.content">{{feature.content}}</p>
 						</li>
 					</ul>

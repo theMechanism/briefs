@@ -1,20 +1,34 @@
 class BriefsController < ApplicationController
 	 respond_to :json
 	def index
-		@briefs = Brief.all.to_json(:include => [:elements, :sites, :audiences])
+		@briefs = Brief.all.to_json(:include => [{ :elements => {
+                                 :include => { :features => {
+                                               :only => [:content, :id] } },
+                                 :only => [:content, :id] } },:audiences, :sites, :comments])
 		render json: @briefs
 	end
 	def show
+	
+		# render json: Brief.find(params[:id]).to_json(:include => [{ :elements => {
+  #                                :include => { :features => {
+  #                                              :only => [:content, :id] } },
+  #                                :only => [:content, :id] } },:audiences, :sites])
 		
-		render json: Brief.find(params[:id])
 	end
 	def update
-	
 		@brief = Brief.find(params[:id])
 		if @brief.update_attributes(brief_params)
 			render json: @brief
 		end
 
+	end
+	def delete
+		@brief = Brief.find(params[:id])
+		if @brief.destroy
+			render json: @brief
+		else
+			render json: @brief
+		end
 	end
 	def create
 		@brief = Brief.new(brief_params)

@@ -5,4 +5,7 @@ class Brief < ActiveRecord::Base
  	 has_many :audiences, :dependent => :destroy
  	 has_many :sites, :dependent => :destroy
   	 has_many :comments, :dependent => :destroy
+  	def features
+    	self.features
+  	end
 end

@@ -9,5 +9,10 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
+
  */
+@import "bourbon";
+@import "bootstrap_and_overrides.css";
+@import "home";
+@import "default-theme.min.css";
+@import "side-comments.min.css";

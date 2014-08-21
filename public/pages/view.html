@@ -1,131 +1,235 @@
 
-  <button ng-click="openPanel = !openPanel">click</button>
-  <div class="row-fluid wrapper">
-    <div class="sidebar one brief-list-container" ng-class="{'open': openPanel, 'closed': !openPanel}" >
-      <p>Current Briefs</p>
-       <ul ng-show="openPanel || initLayout">
-        <li ng-repeat="brief in briefs" class='menu-brief'>
-          <h3><a href="#/{{brief.id}}/view" target="_blank">{{brief.name}}</a> <small>({{brief.due_date}})</small></h3>
-        </li>
-      </ul>
-    </div>
-    <div class="content twoScreens brief-create-container" ng-class="{'open': openPanel, 'closed': !openPanel}">
-          <div class="commentable-area">
-            <fieldset>
-              <legend data-section-id="1" class="commentable-section">Project: {{currentBrief.name}}</legend>
-              <div class='form-row'>
-                    
-                    <p class='label'>Project Name:</p>
-                    <p onbeforesave="updateBrief($data, 'name')" editable-text="currentBrief.name">{{currentBrief.name}}</p>
+<div class="page-wrapper" ng-class="{'two-column-view': twoColumnView, 'three-column-view': threeColumnView, 'final-view': oneColumnView }">
 
-                </div>
-                   <div class='form-row'>
-                  <p class='label'>Project Type:</p>
-                    <p onbeforesave="updateBrief($data, 'type')" editable-text="currentBrief.type">{{currentBrief.type}}</p>
-                </div>
-                <div class='form-row'>
-
-                    <p class='label'>Purpose:</p>
-                    <p onbeforesave="updateBrief($data, 'purpose')" editable-text="currentBrief.purpose">{{currentBrief.purpose}}</p>
-                 </div>
-              <div class='form-row'>
-                <p class='label'>Instructions:</p>
-                <p onbeforesave="updateBrief($data, 'instructions')" editable-text="currentBrief.instructions">{{currentBrief.instructions}}</p>
-              </div>
-              <div class='form-row'>
-                <p class='label'>Current Website:</p>
-                <p onbeforesave="updateBrief($data, 'website')" editable-text="currentBrief.website">{{currentBrief.website}}</p>
-              </div>             
-            </fieldset>
-            
-            <fieldset class='pos-rel'>
-            <legend data-section-id="2" class="commentable-section">Elements:</legend>
-          
-            <div ng-repeat="elem in currentBrief.elements" class='form-row pos-rel'>
-              
-              <button type="button" ng-click="deleteThis('element', elem.id, $event)" class="delete btn-danger">X</button>
-
-              <p onbeforesave="updateElem(elem, $data)" editable-text="elem.content">{{elem.content}}</p>
-              <button ng-click="addNewFeature(elem)">+1</button>
-              <ul>
-                <li ng-repeat='feature in elem.features' class='pos-rel'>
-                  <button type="button" ng-click="deleteThis('feature', feature.id, $event)" class="delete btn-danger">X</button>
-                  <p onbeforesave="updateFeature(elem, feature, $data)" editable-text="feature.content">{{feature.content}}</p>
-                </li>
-              </ul>
-            </div>
-            <div ng-controller="EditableElementsCtrl">
-              <button class='addElm' ng-click="addNewElm()">+1</button> 
-              <div class="form-group" data-ng-repeat="elm in elms">
-                <form id='elem-form'>
-                  <input type="text" ng-model="elm.content" name="element[content]" placeholder="Enter an Element name">
-                  <div class="form-group" data-ng-repeat="feature in elm.features">
-                    <input type="text" class='feature' ng-model="feature.content" name="" placeholder="Enter a Feature of this element">
-                    <br>
-                    <button  ng-show="$last" ng-click="addNewFeature(elm)">Add another feature</button>
-                  </div>
-                </form>
-                <button  ng-show="$last"ng-click="saveElms()">Save</button>
-              </div>
-            </div>
-          </fieldset>
-          <fieldset class='pos-rel'>
-            <legend data-section-id="3" class="commentable-section">Audience:</legend>
-            <button  class='addElement' ng-click="addNewUser()">+1</button>
-
-            <ul>
-              <li ng-repeat="audience in currentBrief.audience"  class='form-row pos-rel'>
-                <p onbeforesave="updateAudience(audience, $data)" editable-text="audience.description">{{audience.description || "Enter User Description"}}</p>
-                
-                <button type="button" ng-click="deleteThis('audience', audience.id, $event)" class="delete btn-danger">X</button>
-              </li>
-
-            </ul>
-          </fieldset>
-          <fieldset class='pos-rel'>
-            <legend data-section-id="4" class="commentable-section">Similar Work:</legend>
-            <button  class='addElement' ng-click="addNewSite()">+1</button> 
-            <ul>
-              <li ng-repeat="site in currentBrief.sites" class='form-row pos-rel' >
-                <p onbeforesave="updateSite(site, $data)" editable-text="site.name"> {{site.name || "Enter Similar Work"}} </p>
-                <button type="button" ng-click="deleteThis('site', site.id, $event)" class="delete btn-danger">X</button>
-              </li>
-            </ul>
-          </fieldset>
-          <fieldset>
-            <legend data-section-id="5" class="commentable-section">Dates:</legend>
-            <div class='form-row'>
-              <p class='label'>Issue Date</p>
-              <p onbeforesave="updateBrief($data, 'issue_date')" editable-bsdate="currentBrief.issue_date" e-datepicker-popup="dd-MMMM-yyyy">{{currentBrief.issue_date}}</p>
-            </div>
-            <div class='form-row'>
-              <p class='label'>Due Date:</p>
-              <p onbeforesave="updateBrief($data, 'due_date')" editable-bsdate="currentBrief.due_date" e-datepicker-popup="dd-MMMM-yyyy">{{currentBrief.due_date}}</p>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend data-section-id="6" class="commentable-section">Contact:</legend>
-            <div class='form-row'>
-              <p class='label'>Contact Name:</p>
-              <p onbeforesave="updateBrief($data, 'contact_name')" editable-text="currentBrief.contact_name">{{currentBrief.contact_name}}</p>
-            </div>
-            <div class='form-row'>
-              <p class='label'>Contact</p>
-              <p onbeforesave="updateBrief($data, 'contact')" editable-text="currentBrief.contact">{{currentBrief.contact}}</p>
-            </div>
-            <div class='form-row'>
-              <p class='label'>Internal Resources:</p>
-              <p onbeforesave="updateBrief($data, 'int_res')" editable-text="currentBrief.int_res">{{currentBrief.int_res}}</p>
-            </div>
-            <div class='form-row'>
-              <p class='label'>Client Information:</p>
-              <p onbeforesave="updateBrief($data, 'client_information')" editable-text="currentBrief.client_information">{{currentBrief.client_information}}</p>
-            </div>
-            <div class='form-row'>
-              <p class='label'>Competitors</p>
-              <p onbeforesave="updateBrief($data, 'competitors')" editable-text="currentBrief.competitors">{{currentBrief.competitors}}</p>
-            </div>
-          </fieldset>
-        </div>
+  <div class="brief-list-container" ng-class="{'box-shadow': !fullWidth}">
+       <div class='header' ng-click='toggleColumn()'>
+        <span class='logo'></span>Briefs
+      
       </div>
+ 
+    <table id="briefsTable" class="table tablesorter" ng-show='(fullWidth && !smallBar) || (twoColumnView && !smallBar)'> 
+      <thead> 
+        <tr> 
+            <th ng-show='fullWidth'></th> 
+            <th ng-show='fullWidth'>Due Date</th> 
+            <th>Client Name</a></th> 
+            <th ng-show='fullWidth'>Type</th> 
+            <th ></th> 
+        </tr> 
+      </thead> 
+        <tbody> 
+        <tr ng-repeat="brief in briefs"> 
+            <td ng-show='fullWidth'><div class='delete_icon' ng-click='deleteBrief(brief)'></div></td> 
+            <td ng-show='fullWidth'> {{brief.due_date}}</td> 
+            <td>
+              <a href="#/{{brief.id}}/view" target="_blank" tabindex="-1" class='name'>{{brief.name}}</a>
+              <br>
+              <p ng-show='fullWidth' class='margin-top'>{{brief.purpose || "This is where a description would be if you wrote one, you dumb idiot"}}</p>
+              <p ng-show='!fullWidth' class='margin-top'>{{brief.type_of_work || "Type Of Work"}}</p>
+              <p ng-show='!fullWidth' class='margin-top'>{{brief.due_date || "10/12/2056"}}</p>
+            </td> 
+            <td ng-show='fullWidth'>{{brief.type_of_work}}</td> 
+            <td><div class='print'></div></td> 
+        </tr> 
+      </tbody> 
+    </table>
+    <div ng-show='threeColumnView || smallBar'>
+      Current Briefs
+    </div> 
+  </div>
+  <div class='create-brief-wrapper'>
+    <div class='project-wrapper' style='height:100%' ng-class="{'box-shadow': isSaved}" >
+  
+     
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- //////////////S///T///E///P/////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+
+
+
+
+      <div class='savedForm'>
+         <div class="commentable-area">
+            <fieldset class='padding commentable-section' data-section-id="1" >
+               <h2 class='info pos-rel' onbeforesave="updateBrief($data, 'name')" editable-text="currentBrief.name">{{currentBrief.name}}</h2>
+               <p onbeforesave="updateBrief($data, 'website')" class='poa-rel' editable-text="currentBrief.website">{{currentBrief.website}}</p>
+              <p class='margin-top pos-rel' onbeforesave="updateBrief($data, 'due_date')" editable-bsdate="currentBrief.due_date" e-datepicker-popup="dd-MMMM-yyyy">Due Date: {{currentBrief.due_date}}</p>
+            </fieldset>
+            <hr> 
+          <fieldset class='padding commentable-section' data-section-id="2" >
+              <p onbeforesave="updateBrief($data, 'purpose')" editable-text="currentBrief.purpose" class='margin-bottom'>{{currentBrief.purpose}}</p>
+          </fieldset>
+          
+        <!-- compontents and features -->
+    
+          <h2 class='moveable-header'>Components and Features</h2>
+          <hr class='margin-bottom'>
+    
+          <fieldset data-section-id='3' class='padding commentable-section abs-group'>
+            <div ng-repeat="elem in currentBrief.elements">
+              <div class="edit-form-row pos-rel">
+                <p onbeforesave="updateElem(elem, $data)" class='input' editable-text="elem.content">{{elem.content}}</p>
+                <div class="edit-buttons-group">  
+                  <button tabindex="-1" type="button" ng-click="deleteThis('element', elem.id, $event)" class="delete"></button>
+                  <button tabindex="-1" class='plus' ng-click="addNewFeature(elem)"></button>
+                </div>
+                <div style='clear:both'></div>
+              </div>
+              <div class="edit-form-row feature pos-rel">
+                <ul ng-repeat='feature in elem.features'>
+                  <li onbeforesave="updateFeature(elem, feature, $data)" class='pos-rel' editable-text="feature.content">{{feature.content || "Description"}}
+                 
+                    <div class="edit-buttons-group">  
+                      <button type="button" tabindex="-1" ng-click="deleteThis('feature', feature.id, $event)" class='delete'></button>
+                    </div>
+                    <div style:'clear:both'></div>
+                   </li>
+                </ul>
+
+            </div>
+          </div>
+          
+
+          <div style='clear:both'></div>
+          
+
+
+
+          <div ng-controller="EditableElementsCtrl">
+              <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                <div class="edit-form-row">
+                  <input type="text" ng-model="elm.content" name="element[content]" placeholder="Enter an Element name">
+                  <div class="edit-buttons-group">
+                    <button class='cancel' tabindex="-1" ng-click="toggleForm();"></button>
+                    <button class='save' tabindex="-1" ng-click="saveElm(elm)"></button>
+                  </div>
+                 
+                </div>
+                <div style='clear:both'></div>
+                <div class="edit-form-row feature pos-rel">
+                  <div data-ng-repeat="feature in elm.features">
+                    
+                    <div class='bull'>&bull;</div><input type="text" class='feature' ng-model="feature.content" name="" placeholder="Enter a Feature">
+                    <div class="edit-buttons-group">
+                      <button tabindex="-1" class='cancel' ng-click="removeFeature($event, feature)"></button> 
+                      <button  tabindex="-1" ng-show="$last" class='plus'ng-click="addNewFeature(elm)"></button>
+                    </div>
+                    <div style='clear:both'></div>
+                  </div>
+                </div>
+              </form>
+              <div style='clear:both'></div>
+              <div class="add-comp pos-rel" ng-show='showButton'>Add Additional Component<button tabindex="-1" class='edit-button addElm plus' ng-click="toggleForm()"></button></div>
+            </div>
+          </fieldset>
+      
+          <h2 class='moveable-header'>Audience</h2>
+          <hr class='margin-bottom'>
+          <fieldset class='padding commentable-section abs-group' data-section-id="4" >
+            <div ng-repeat="audience in currentBrief.audiences">
+                 <div class="edit-form-row pos-rel">
+                  <p onbeforesave="updateAudience(audience, $data)" class='input' editable-text="audience.description">{{audience.description}}</p>
+                  <div class="edit-buttons-group">  
+                    <button tabindex="-1" type="button" ng-click="deleteThis('audience', audience.id, $event)" class="delete"></button>
+                  </div>
+                  <div style='clear:both'></div>
+                </div>
+              </div>
+            <div ng-controller="EditableAudienceCtrl">
+              <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                <div class="edit-form-row">
+                  <input tabindex="-1" type="text" ng-model="user.description" name="element[content]" placeholder="Enter a User Type">
+                  <div class="edit-buttons-group">
+                    <button tabindex="-1" class='delete' ng-click="toggleForm();"></button>
+                    <button  tabindex="-1" class='save' ng-click="saveUser(user)"></button>
+                  </div>
+                 
+                </div>
+                <div style='clear:both'></div>
+              </form>
+            
+
+            <div class="add-comp pos-rel" ng-show='showButton'>Add User Type<button tabindex="-1" class='edit-button addElm plus' ng-click="toggleForm()"></button></div>
+            </div>
+  
+          </fieldset>
+          <!-- end components and features -->
+          <h2 class='moveable-header'>Similar Work</h2>
+          <hr class='margin-bottom'>
+            <fieldset class='padding commentable-section' data-section-id="4">
+                <div ng-repeat="site in currentBrief.sites">
+                   <div class="edit-form-row pos-rel">
+                    <p onbeforesave="updateSite(site, $data)" class='input' editable-text="site.name">{{site.name}}</p>
+                    <div class="edit-buttons-group">  
+                      <button tabindex="-1" type="button" ng-click="deleteThis('site', site.id, $event)" class="delete"></button>
+                    </div>
+                    <div style='clear:both'></div>
+                  </div>
+                </div>
+                <div ng-controller="EditableSitesCtrl">
+                  
+                  <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                    <div class="edit-form-row">
+                      <input tabindex="-1" type="text" ng-model="site.name" name="site[name]" placeholder="Enter an site name">
+                      <div class="edit-buttons-group">
+                       <button tabindex="-1" class='delete' ng-click="toggleForm();"></button>
+                       <button tabindex="-1" class='save' ng-click="saveSite(site)"></button>
+                      </div>
+                    </div>
+                    <div style='clear:both'></div>
+                  </form>
+                <div class="add-comp pos-rel" ng-show='showButton'>Add Project<button class='edit-button addElm plus' tabindex="-1" ng-click="toggleForm()"></button></div>
+              </div>
+
+           
+
+
+
+            </fieldset>
+
+<!--      <div ng-repeat="sites in currentBrief.sites"  class='form-row pos-rel'>
+                    <p onbeforesave="updateSite(site, $data)" editable-text="site.name"> {{site.name || "Enter Similar Work"}} </p>
+                    <button type="button" ng-click="deleteThis('site', site.id, $event)" class="delete btn-danger"></button>
+                  </div>
+                  <div class="add-comp pos-rel">Add Project  <button  class='edit-button plus' ng-click="addNewSite()"></button> </div> -->
+
+         <h2 class='moveable-header'>Contact</h2>
+         <hr class='margin-bottom'>
+         <fieldset class='padding commentable-section' data-section-id="3" >
+           <p onbeforesave="updateBrief($data, 'contact_name')" editable-text="currentBrief.contact_name">{{currentBrief.contact_name}}</p>
+            <p onbeforesave="updateBrief($data, 'contact')" editable-text="currentBrief.contact">{{currentBrief.contact}}</p>
+         </fieldset>
+       </div>
+    </div> 
+
+
+
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- //////////////S///T///E///P/////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+
     </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+

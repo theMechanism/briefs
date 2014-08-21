@@ -1,46 +1,51 @@
 App.controller("EditableElementsCtrl", function($scope, $resource, $http, $location){
 	
-	$scope.elms = [];
-
+	$scope.elm = {"features":[{ 'id': 1 }]}
+	$scope.showButton = true;
 	
-	$scope.addNewElm = function() {
-	  var newItemNo = $scope.elms.length+1;
-	  $scope.elms.push({ 'id':newItemNo , "features":[{ 'id': 1 }] });
-	  console.log($scope.elms)
+	$scope.toggleForm = function() {
+		$scope.showButton = !$scope.showButton;
+		if (angular.isDefined($scope.elm)){
+			$scope.elm = {"features":[{ 'id': 1 }]}
+
+		}
+		
 	};
 	
-
-
 	$scope.addNewFeature = function(elm) {
-	
 	   var newItemNo = elm.features.length+1;
 	   elm.features.push({'id':newItemNo});
 	};
-
-
-	$scope.saveElms = function(){
-		angular.forEach($scope.elms, function(value, key) {
-	       		$scope.saveElm(value);
-	     	});
+	$scope.removeFeature = function(event, feature){
+		$scope.elm.features.splice(feature, 1);
 	}
 
 	$scope.saveElm = function(newElm){
-		var fd = new FormData(); 
-		fd.append('element[content]', newElm.content);
-		fd.append('element[brief_id]', $scope.currentBrief.id);
+		debugger;
+		if (angular.isDefined(newElm.content)){
+				var fd = new FormData(); 
+			fd.append('element[content]', newElm.content);
+			fd.append('element[brief_id]', $scope.currentBrief.id);
+			
+			$http.post('/elements', fd, {
+				transformRequest: angular.identity,
+				headers:{'Content-Type': undefined}
+			}).success(function(d){
+				$scope.currentBrief.elements.push(d);
+				$scope.toggleForm();
+				angular.forEach(newElm.features, function(value, key) {
+		       		if (angular.isDefined(value.content)){
+		       			$scope.saveFeature(value, d);
+		       		}
+		       		
+		     	});
 		
-		$http.post('/elements', fd, {
-			transformRequest: angular.identity,
-			headers:{'Content-Type': undefined}
-		}).success(function(d){
-			$scope.currentBrief.elements.push(d);
-			debugger;
-			angular.forEach(newElm.features, function(value, key) {
-	       		$scope.saveFeature(value, d);
-	     	});
-	
-		}).error(function(){
-		});		
+			}).error(function(){
+			});	
+		}else{
+			alert("Please enter a description for your component");
+		}
+			
 	}
 	$scope.saveFeature = function(value, d){
 		var fd = new FormData(); 

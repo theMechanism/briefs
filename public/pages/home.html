@@ -1,26 +1,371 @@
 
-<div ng-controller="BriefsCtrl" class='container'>
-  <a href="#create" class=" create-button push_button">Create New Brief</a>
-<table class="table">
- <thead>
-    <tr>
-      <th>Due Date</th>
-      <th>Client</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="brief in briefs">
-      <td>{{brief.due_date}}</td>
-      <td>
-        <p><strong>{{brief.name}}</strong></p>
-        <p>{{brief.website}}</p>
-        <p>{{brief.purpose}}</p>
+<div class="page-wrapper" ng-class="{'two-column-view': twoColumnView, 'three-column-view': threeColumnView, 'final-view': oneColumnView }">
+
+  <div class="brief-list-container" ng-class="{'box-shadow': !fullWidth}">
+       <div class='header' ng-click='toggleColumn()'>
+        <span class='logo'></span>Briefs
       
-      </td>
-      <td><a href="">Edit</a> || <a href="">Print</a></td>
-    </tr>
-  </tbody>
-</table>
+      </div>
+     <button tabindex="-1" ng-click='twoColumn()' ng-show='fullWidth' class='createBrief'>Create a New Brief</button>
+    <table id="briefsTable" class="table tablesorter" ng-show='(fullWidth && !smallBar) || (twoColumnView && !smallBar)'> 
+      <thead> 
+        <tr> 
+            <th ng-show='fullWidth'></th> 
+            <th ng-show='fullWidth'>Due Date</th> 
+            <th>Client Name</a></th> 
+            <th ng-show='fullWidth'>Type</th> 
+            <th ></th> 
+        </tr> 
+      </thead> 
+        <tbody> 
+        <tr ng-repeat="brief in briefs"> 
+            <td ng-show='fullWidth'><div class='delete_icon' ng-click='deleteBrief(brief)'></div></td> 
+            <td ng-show='fullWidth'> {{brief.due_date}}</td> 
+            <td>
+              <a href="#/{{brief.id}}/view" target="_blank" tabindex="-1" class='name'>{{brief.name}}</a>
+              <br>
+              <p ng-show='fullWidth' class='margin-top'>{{brief.purpose || "This is where a description would be if you wrote one, you dumb idiot"}}</p>
+              <p ng-show='!fullWidth' class='margin-top'>{{brief.type_of_work || "Type Of Work"}}</p>
+              <p ng-show='!fullWidth' class='margin-top'>{{brief.due_date || "10/12/2056"}}</p>
+            </td> 
+            <td ng-show='fullWidth'>{{brief.type_of_work}}</td> 
+            <td><div class='print'></div></td> 
+        </tr> 
+      </tbody> 
+    </table>
+    <div ng-show='threeColumnView || smallBar'>
+      Current Briefs
+    </div> 
+  </div>
+  <div class='create-brief-wrapper'>
+    <div class='project-wrapper' ng-class="{'box-shadow': isSaved}" >
+      <div class='header' ng-show='!isSaved'>
+       {{ newBrief.name ||  "New Brief" }}
+      </div>
+      <form id='brief-form' ng-show="!isSaved" class='create-form' ng-submit="saveBrief(newBrief)">
+        <fieldset>
+          <div class="heading padding">Project Details</div>
+          <div class='form-row'>
+                <p class='label'>Project Name</p>
+                <input type="text" tabindex="-1" name="brief[name]" ng-model='newBrief.name' >
+                <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+              <p class='label'>Project Type</p>
+              <select
+                ng-model="newBrief.type_of_work"
+                [name="brief[type_of_work]"] tabindex="-1">
+                <option value="">Select Type</option>
+                <option value="branding">Branding</option>
+                <option value="website">Website</option>
+                <option value="web_app">Web App</option>
+                <option value="iOs">iOS</option>
+
+              </select>
+                <div style='clear:both'></div>
+           </div>
+           <div class='form-row'>
+              <p class='label'>Purpose</p>
+              <input type="textarea" class='textarea' tabindex="-1" name="brief[purpose]" ng-model='newBrief.purpose' >
+              <div style='clear:both'></div>
+           </div>
+           <div class='form-row'>
+            <p class='label'>Issue Date</p>
+            <input type="date"  name="brief[issue_date]" tabindex="-1" ng-model='newBrief.issue_date' >
+            <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+            <p class='label'>Due Date:</p>
+            <input type="date"  name="brief[due_date]" tabindex="-1" ng-model='newBrief.due_date' >
+            <div style='clear:both'></div>
+          </div>
+         </fieldset>
+         <fieldset>
+          <div class="heading padding">Contact Info</div>
+          <div class='form-row'>
+              <p class='label'>Main Contact</p>
+              <input type="text"  name="brief[contact_name]" tabindex="-1" ng-model='newBrief.contact_name' >
+              <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+              <p class='label'>Current Website</p>
+              <input type="text"  name="brief[website]" tabindex="-1" ng-model='newBrief.website' >
+              <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+              <p class='label'>Email</p>
+              <input type="text"  name="brief[contact]" tabindex="-1" ng-model='newBrief.contact' >
+              <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+            <p class='label'>Client Information:</p>
+            <input type="text"  name="brief[client_information]" tabindex="-1"  ng-model='newBrief.client_information'>
+            <div style='clear:both'></div>
+          </div>
+          <div class='form-row'>
+            <p class='label'>Competitors</p>
+            <input type="text"  name="brief[competitors]" tabindex="-1" ng-model='newBrief.competitors' >
+            <div style='clear:both'></div>
+          </div>
+        </fieldset>
+        <input class='form-button createBrief' type="submit"  tabindex="-1" value="Create Brief" ng-click=''>
+      </form>
+      
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- //////////////S///T///E///P/////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+
+
+
+
+      <div class='savedForm' ng-show="isSaved">
+         <div class="commentable-area">
+            <fieldset class='padding commentable-section' data-section-id="1" >
+               <h2 class='info pos-rel' onbeforesave="updateBrief($data, 'name')" editable-text="currentBrief.name">{{currentBrief.name}}</h2>
+               <p onbeforesave="updateBrief($data, 'website')" class='poa-rel' editable-text="currentBrief.website">{{currentBrief.website}}</p>
+              <p class='margin-top pos-rel' onbeforesave="updateBrief($data, 'due_date')" editable-bsdate="currentBrief.due_date" e-datepicker-popup="dd-MMMM-yyyy">Due Date: {{currentBrief.due_date}}</p>
+            </fieldset>
+            <hr> 
+          <fieldset class='padding commentable-section' data-section-id="2" >
+              <p onbeforesave="updateBrief($data, 'purpose')" editable-text="currentBrief.purpose" class='margin-bottom'>{{currentBrief.purpose}}</p>
+          </fieldset>
+          
+        <!-- compontents and features -->
+    
+          <h2 class='moveable-header'>Components and Features</h2>
+          <hr class='margin-bottom'>
+    
+          <fieldset data-section-id='3' class='padding commentable-section abs-group'>
+            <div ng-repeat="elem in currentBrief.elements">
+              <div class="edit-form-row pos-rel">
+                <p onbeforesave="updateElem(elem, $data)" class='input' editable-text="elem.content">{{elem.content}}</p>
+                <div class="edit-buttons-group">  
+                  <button tabindex="-1" type="button" ng-click="deleteThis('element', elem.id, $event)" class="delete"></button>
+                  <button tabindex="-1" class='plus' ng-click="addNewFeature(elem)"></button>
+                </div>
+                <div style='clear:both'></div>
+              </div>
+              <div class="edit-form-row feature pos-rel">
+                <ul ng-repeat='feature in elem.features'>
+                  <li onbeforesave="updateFeature(elem, feature, $data)" class='pos-rel' editable-text="feature.content">{{feature.content || "Description"}}
+                 
+                    <div class="edit-buttons-group">  
+                      <button type="button" tabindex="-1" ng-click="deleteThis('feature', feature.id, $event)" class='delete'></button>
+                    </div>
+                    <div style:'clear:both'></div>
+                   </li>
+                </ul>
+
+            </div>
+          </div>
+          
+
+          <div style='clear:both'></div>
+          
+
+
+
+          <div ng-controller="EditableElementsCtrl">
+              <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                <div class="edit-form-row">
+                  <input type="text" ng-model="elm.content" name="element[content]" placeholder="Enter an Element name">
+                  <div class="edit-buttons-group">
+                    <button class='cancel' tabindex="-1" ng-click="toggleForm();"></button>
+                    <button class='save' tabindex="-1" ng-click="saveElm(elm)"></button>
+                  </div>
+                 
+                </div>
+                <div style='clear:both'></div>
+                <div class="edit-form-row feature pos-rel">
+                  <div data-ng-repeat="feature in elm.features">
+                    
+                    <div class='bull'>&bull;</div><input type="text" class='feature' ng-model="feature.content" name="" placeholder="Enter a Feature">
+                    <div class="edit-buttons-group">
+                      <button tabindex="-1" class='cancel' ng-click="removeFeature($event, feature)"></button> 
+                      <button  tabindex="-1" ng-show="$last" class='plus'ng-click="addNewFeature(elm)"></button>
+                    </div>
+                    <div style='clear:both'></div>
+                  </div>
+                </div>
+              </form>
+              <div style='clear:both'></div>
+              <div class="add-comp pos-rel" ng-show='showButton'>Add Additional Component<button tabindex="-1" class='edit-button addElm plus' ng-click="toggleForm()"></button></div>
+            </div>
+          </fieldset>
+      
+          <h2 class='moveable-header'>Audience</h2>
+          <hr class='margin-bottom'>
+          <fieldset class='padding commentable-section abs-group' data-section-id="4" >
+            <div ng-repeat="audience in currentBrief.audience">
+                 <div class="edit-form-row pos-rel">
+                  <p onbeforesave="updateAudience(audience, $data)" class='input' editable-text="audience.description">{{audience.description}}</p>
+                  <div class="edit-buttons-group">  
+                    <button tabindex="-1" type="button" ng-click="deleteThis('audience', audience.id, $event)" class="delete"></button>
+                  </div>
+                  <div style='clear:both'></div>
+                </div>
+              </div>
+            <div ng-controller="EditableAudienceCtrl">
+              <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                <div class="edit-form-row">
+                  <input tabindex="-1" type="text" ng-model="user.description" name="element[content]" placeholder="Enter a User Type">
+                  <div class="edit-buttons-group">
+                    <button tabindex="-1" class='delete' ng-click="toggleForm();"></button>
+                    <button  tabindex="-1" class='save' ng-click="saveUser(user)"></button>
+                  </div>
+                 
+                </div>
+                <div style='clear:both'></div>
+              </form>
+            
+
+            <div class="add-comp pos-rel" ng-show='showButton'>Add User Type<button tabindex="-1" class='edit-button addElm plus' ng-click="toggleForm()"></button></div>
+            </div>
   
+          </fieldset>
+          <!-- end components and features -->
+          <h2 class='moveable-header'>Similar Work</h2>
+          <hr class='margin-bottom'>
+            <fieldset class='padding commentable-section' data-section-id="4">
+                <div ng-repeat="site in currentBrief.sites">
+                   <div class="edit-form-row pos-rel">
+                    <p onbeforesave="updateSite(site, $data)" class='input' editable-text="site.name">{{site.name}}</p>
+                    <div class="edit-buttons-group">  
+                      <button tabindex="-1" type="button" ng-click="deleteThis('site', site.id, $event)" class="delete"></button>
+                    </div>
+                    <div style='clear:both'></div>
+                  </div>
+                </div>
+                <div ng-controller="EditableSitesCtrl">
+                  
+                  <form id='elem-form' class='pos-rel' ng-show='!showButton'>
+                    <div class="edit-form-row">
+                      <input tabindex="-1" type="text" ng-model="site.name" name="site[name]" placeholder="Enter an site name">
+                      <div class="edit-buttons-group">
+                       <button tabindex="-1" class='delete' ng-click="toggleForm();"></button>
+                       <button tabindex="-1" class='save' ng-click="saveSite(site)"></button>
+                      </div>
+                    </div>
+                    <div style='clear:both'></div>
+                  </form>
+                <div class="add-comp pos-rel" ng-show='showButton'>Add Project<button class='edit-button addElm plus' tabindex="-1" ng-click="toggleForm()"></button></div>
+              </div>
+
+           
+
+
+
+            </fieldset>
+
+<!--      <div ng-repeat="sites in currentBrief.sites"  class='form-row pos-rel'>
+                    <p onbeforesave="updateSite(site, $data)" editable-text="site.name"> {{site.name || "Enter Similar Work"}} </p>
+                    <button type="button" ng-click="deleteThis('site', site.id, $event)" class="delete btn-danger"></button>
+                  </div>
+                  <div class="add-comp pos-rel">Add Project  <button  class='edit-button plus' ng-click="addNewSite()"></button> </div> -->
+
+         <h2 class='moveable-header'>Contact</h2>
+         <hr class='margin-bottom'>
+         <fieldset class='padding commentable-section' data-section-id="3" >
+           <p onbeforesave="updateBrief($data, 'contact_name')" editable-text="currentBrief.contact_name">{{currentBrief.contact_name}}</p>
+            <p onbeforesave="updateBrief($data, 'contact')" editable-text="currentBrief.contact">{{currentBrief.contact}}</p>
+         </fieldset>
+       </div>
+    </div> 
+
+
+
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- //////////////S///T///E///P/////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+<!-- ////////////////////////////////////////////// -->
+
+    </div>
+    <div class='component-wrapper'>
+      <!-- Components/features -->
+      <div ng-controller="ElmsCtrl" ng-show="$parent.addElements">
+        <div class='header step-two'>
+         {{ currentBrief.name ||  "No Name" }}
+        </div>
+        <div class="heading padding">Components and Features</div>
+        <div class="form-group padding" data-ng-repeat="elm in elms">
+          <form id='elem-form'>
+           <div class="form-row">
+            <p class='label'>Component</p>
+             <input type="text" ng-model="elm.content" tabindex="-1" name="element[content]" tabindex="-1" placeholder="Enter an Element name">
+             <div style='clear:both'></div>
+           </div>
+           
+            <div class="feature-group" data-ng-repeat="feature in elm.features">
+
+              <div class="form-row  pos-rel">
+                <p class='label'>Feature</p>
+              <input type="text" class='' ng-model="feature.content" name="" tabindex="-1" placeholder="Enter a Feature of this element">
+              <br>
+              <button class='edit-button plus' tabindex="-1" ng-show="$last" ng-click="addNewFeature(elm)"></button>
+              <div style='clear:both'></div>
+              </div>
+              <hr>
+            </div>
+            <div ng-show="$last" class="add-comp padding pos-rel">Add Additional Component<button class='addComp edit-button addElm plus' tabindex="-1" ng-click="addNewElm()"></button></div>
+          </form>
+           <button ng-show="$last" tabindex="-1" ng-click="saveElms()" class='next'>Next</button>
+        </div>
+      </div>
+      <div ng-controller="AudiencesCtrl" ng-show="$parent.showAudience" class='audience right-info threeScreens' ng-class="">
+        <div class='header step-two'>
+         {{ currentBrief.name ||  "No Name" }}
+        </div>
+         <div class="heading padding">Audience</div>
+          <div class="form-group padding" data-ng-repeat="user in users">
+            <form id='user-form'>
+              <div class="form-row pos-rel">
+                <p class='label'>User Type</p>
+                <input type="text" ng-model="user.description" tabindex="-1" name="user[description]" placeholder="Describe a user of this client's service">
+               
+                <div style='clear:both'></div>
+              </div>
+              <div ng-show="$last" class="add-comp padding pos-rel">Add Additional User <button class='edit-button plus'  ng-show="$last" ng-click="addNewUser()"></button> </div>
+            </form>
+            <button  class='next' tabindex="-1" ng-show="$last" ng-click="saveUsers()">Next</button>
+          </div>
+      </div> 
+      <div ng-controller="SimilarProjectsCtrl" class='similar-projects right-info threeScreens' ng-show="$parent.similar">
+        <div class='header step-two'>
+         {{ currentBrief.name ||  "No Name" }}
+        </div>
+        <div class="heading padding">Similar work from The Mechanism</div>
+          <div class="form-group padding" data-ng-repeat="site in sites">
+              <form id='similar-work'>
+                 <div class="form-row pos-rel">
+                   <p class='label'>Project</p>
+                    <input type="text" ng-model="site.name" name="site[name]" tabindex="-1" placeholder="Which project">
+                     <div style='clear:both'></div>
+                  </div>
+                  <div ng-show="$last" class="add-comp padding pos-rel">Add Additional User <button class='edit-button plus'  ng-show="$last" tabindex="-1" ng-click="addNewSite()"></button> </div>
+              </form>
+          <button class='next' tabindex="-1" ng-show="$last" ng-click="saveSites()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+
+
+
+
