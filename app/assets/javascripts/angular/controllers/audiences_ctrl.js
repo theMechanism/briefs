@@ -18,7 +18,9 @@ App.controller("AudiencesCtrl", function($scope, $resource, $http, $location){
 				transformRequest: angular.identity,
 				headers:{'Content-Type': undefined}
 			}).success(function(d){
-				$scope.currentBrief.audience.push(d);
+				
+					$scope.currentBrief.audiences.push(d);
+
 			}).error(function(){});		
 		}else{
 			$scope.updateAudienceVars();
